@@ -1,0 +1,6 @@
+monitor:
+  build: .
+  command: go run main.go
+  volumes:
+    - .:/go/src/github.com/maxcnunes/monitor
+    - /var/run/docker.sock:/tmp/docker.sock
