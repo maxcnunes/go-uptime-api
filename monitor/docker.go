@@ -56,9 +56,7 @@ func StartEventListener(data *DataMonitor) {
 // LoadVirtualHostsToURLS ...
 func LoadVirtualHostsToURLS(data *DataMonitor) {
 	filters := make(map[string][]string)
-	filters["status"] = []string{
-		"running",
-	}
+	filters["status"] = []string{"running"}
 
 	containers, _ := client.ListContainers(docker.ListContainersOptions{All: false, Filters: filters})
 	for _, container := range containers {
