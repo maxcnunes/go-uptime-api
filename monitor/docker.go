@@ -68,6 +68,7 @@ func LoadVirtualHostsToURLS(data *DataMonitor) {
 		virtualHost := getVirtualHost(container.ID)
 
 		if virtualHost != "" {
+			// assumes all virtual host are http for while
 			data.AddURL("http://" + virtualHost)
 		}
 	}
