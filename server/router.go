@@ -10,12 +10,10 @@ import (
 	"time"
 )
 
-var (
-	data monitor.DataMonitor
-)
-
 // Router ...
-type Router struct{}
+type Router struct {
+	data *monitor.DataMonitor
+}
 
 func checkTargetsStatus(data *monitor.DataMonitor) {
 	results := monitor.AsyncHTTPGets(data.URLS)
@@ -26,47 +24,45 @@ func checkTargetsStatus(data *monitor.DataMonitor) {
 	}
 }
 
-func checkTargetsEvery10seconds() {
-	data = monitor.DataMonitor{}
+func (r Router) checkTargetsEvery10seconds() {
 	// temp examples
-	data.URLS = append(data.URLS, "https://google.com/", "http://twitter.com/")
+	r.data.URLS = append(r.data.URLS, "https://google.com/", "http://twitter.com/")
 
-	monitor.StartEventListener(&data)
+	monitor.StartEventListener(r.data)
 	ticker := time.NewTicker(time.Second * 10)
 	go func() {
 		for {
 			select {
 			case <-ticker.C:
-				fmt.Printf("Checking %d URLs status...", len(data.URLS))
-				checkTargetsStatus(&data)
+				fmt.Printf("Checking %d URLs status...", len(r.data.URLS))
+				checkTargetsStatus(r.data)
 			}
 		}
 	}()
 }
 
-func listHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+func (r Router) listHandler(rw http.ResponseWriter, req *http.Request) {
+	rw.Header().Set("Content-Type", "application/json")
 
-	j, err := json.Marshal(data.URLS)
+	j, err := json.Marshal(r.data.URLS)
 	if err != nil {
 		panic(err)
 	}
 
-	w.Write(j)
+	rw.Write(j)
 }
 
 // Start ...
-func (r Router) Start() {
-	log.Print("Starting targets checking async (every 10 sec)")
-	checkTargetsEvery10seconds()
+func (r Router) Start(data *monitor.DataMonitor) *mux.Router {
+	r.data = data
 
-	log.Print("Starting server")
+	log.Print("Starting targets checking async (every 10 sec)")
+	r.checkTargetsEvery10seconds()
+
+	log.Print("Starting API server")
 
 	router := mux.NewRouter()
-	router.HandleFunc("/", listHandler).Methods("GET")
+	router.HandleFunc("/", r.listHandler).Methods("GET")
 
-	http.Handle("/", router)
-
-	log.Print("Server running on http://0.0.0.0:3000")
-	http.ListenAndServe(":3000", nil)
+	return router
 }

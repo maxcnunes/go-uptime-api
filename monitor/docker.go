@@ -45,7 +45,7 @@ func StartEventListener(data *DataMonitor) {
 				case dockerStart:
 					LoadVirtualHostsToURLS(data)
 				case dockerDestroy:
-					data.RemoveURL("http://facebook.com.br")
+					data.RemoveURL("http://twitter.com/")
 				}
 			}
 		}
