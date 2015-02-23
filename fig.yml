@@ -4,5 +4,5 @@ server:
   ports:
     - "0.0.0.0:3000:3000"
   volumes:
-    - .:/go/src/github.com/maxcnunes/monitor
+    - .:/go/src/github.com/maxcnunes/monitor-api
     - /var/run/docker.sock:/tmp/docker.sock

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
-	"github.com/maxcnunes/monitor/monitor"
+	"github.com/maxcnunes/monitor-api/monitor"
 	"log"
 	"net/http"
 	"time"

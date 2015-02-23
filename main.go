@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/maxcnunes/monitor/server"
+	"github.com/maxcnunes/monitor-api/server"
 )
 
 var (
