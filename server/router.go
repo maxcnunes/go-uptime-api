@@ -43,6 +43,7 @@ func (r Router) checkTargetsEvery10seconds() {
 
 func (r Router) listHandler(rw http.ResponseWriter, req *http.Request) {
 	rw.Header().Set("Content-Type", "application/json")
+	rw.Header().Set("Access-Control-Allow-Origin", "*")
 
 	j, err := json.Marshal(r.data.URLS)
 	if err != nil {
