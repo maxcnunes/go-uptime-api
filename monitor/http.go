@@ -27,7 +27,7 @@ func AsyncHTTPGets(urls []string) []*HTTPResponse {
 		}(url)
 	}
 
-	// watis finish all requests
+	// waits finish all requests
 	for {
 		select {
 		case r := <-ch:
