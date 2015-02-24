@@ -78,13 +78,13 @@ func getVirtualHost(containerID string) string {
 		log.Fatalf("Unable to inspect container %s, error: %s", containerID, err)
 	}
 
-	log.Print(">>> Container Info <<<")
-	log.Printf("Args %s", info.Args)
-	log.Printf("Name %s", info.Name)
-	log.Printf("Env", info.Config.Env)
+	// log.Print(">>> Container Info <<<")
+	// log.Printf("Args %s", info.Args)
+	// log.Printf("Name %s", info.Name)
+	// log.Printf("Env", info.Config.Env)
 	var virtualHost string
 	for _, env := range info.Config.Env {
-		log.Printf(">>> env %s", env)
+		// log.Printf(">>> env %s", env)
 
 		if strings.Contains(env, "VIRTUAL_HOST=") {
 			virtualHost = strings.Replace(env, "VIRTUAL_HOST=", "", -1)
