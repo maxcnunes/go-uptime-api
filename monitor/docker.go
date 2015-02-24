@@ -11,9 +11,9 @@ var (
 )
 
 const (
-	dockerStart   string = "start"
-	dockerDestroy string = "destroy"
-	endpoint      string = "unix:///tmp/docker.sock"
+	dockerStart   = "start"
+	dockerDestroy = "destroy"
+	endpoint      = "unix:///tmp/docker.sock"
 )
 
 // Container ...
@@ -45,7 +45,7 @@ func StartEventListener(data *DataMonitor) {
 				case dockerStart:
 					LoadVirtualHostsToURLS(data)
 				case dockerDestroy:
-					data.RemoveURL("http://twitter.com/")
+					data.RemoveTarget("http://twitter.com/")
 				}
 			}
 		}
@@ -67,7 +67,7 @@ func LoadVirtualHostsToURLS(data *DataMonitor) {
 
 		if virtualHost != "" {
 			// assumes all virtual host are http for while
-			data.AddURL("http://" + virtualHost)
+			data.AddTarget("http://" + virtualHost)
 		}
 	}
 }

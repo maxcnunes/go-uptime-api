@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	data      = monitor.DataMonitor{}
+	data      = monitor.DataMonitor{Events: make(chan monitor.Event)}
 	router    = server.Router{}
 	websocket = server.Websocket{}
 	addr      = flag.String("addr", ":3000", "http service address")
@@ -17,8 +17,6 @@ var (
 
 func main() {
 	flag.Parse()
-
-	data.Events = make(chan int)
 
 	http.Handle("/", router.Start(&data))
 	http.HandleFunc("/ws", websocket.Start(&data))

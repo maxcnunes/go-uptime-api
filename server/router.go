@@ -16,7 +16,7 @@ type Router struct {
 }
 
 func checkTargetsStatus(data *monitor.DataMonitor) {
-	results := monitor.AsyncHTTPGets(data.URLS)
+	results := monitor.AsyncHTTPGets(data.GetAllURLS())
 	for _, result := range results {
 		if result.Response != nil {
 			fmt.Printf("%s status: %s\n", result.URL, result.Response.Status)
@@ -26,7 +26,8 @@ func checkTargetsStatus(data *monitor.DataMonitor) {
 
 func (r Router) checkTargetsEvery10seconds() {
 	// temp examples
-	r.data.URLS = append(r.data.URLS, "https://google.com/", "http://twitter.com/")
+	r.data.AddTarget("https://google.com/")
+	r.data.AddTarget("http://twitter.com/")
 
 	monitor.StartEventListener(r.data)
 	ticker := time.NewTicker(time.Second * 10)
@@ -34,7 +35,7 @@ func (r Router) checkTargetsEvery10seconds() {
 		for {
 			select {
 			case <-ticker.C:
-				fmt.Printf("Checking %d URLs status...", len(r.data.URLS))
+				fmt.Printf("Checking %d URLs status...", len(r.data.Targets))
 				checkTargetsStatus(r.data)
 			}
 		}
@@ -45,7 +46,7 @@ func (r Router) listHandler(rw http.ResponseWriter, req *http.Request) {
 	rw.Header().Set("Content-Type", "application/json")
 	rw.Header().Set("Access-Control-Allow-Origin", "*")
 
-	j, err := json.Marshal(r.data.URLS)
+	j, err := json.Marshal(r.data.Targets)
 	if err != nil {
 		panic(err)
 	}

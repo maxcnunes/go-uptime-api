@@ -24,10 +24,16 @@ var (
 	}
 )
 
-// Send ...
-func (ws wsConnection) Send(msg string) {
-	log.Printf("Sends ws messange [%s]", msg)
+// SendText ...
+func (ws wsConnection) SendText(msg string) {
+	log.Printf("Sends ws message [%s]", msg)
 	ws.conn.WriteMessage(websocket.TextMessage, []byte(msg))
+}
+
+// SendJSON ...
+func (ws wsConnection) SendJSON(json interface{}) {
+	log.Printf("Sends ws object [%s]", json)
+	ws.conn.WriteJSON(json)
 }
 
 // Start ...
@@ -48,11 +54,13 @@ func (ws Websocket) Start(data *monitor.DataMonitor) func(http.ResponseWriter, *
 		for {
 			select {
 			case event := <-ws.data.Events:
-				switch event {
+				switch event.Event {
 				case monitor.Added:
-					wsConn.Send("WS: Added new target")
+					// wsConn.SendText("WS: Added new target")
+					wsConn.SendJSON(event)
 				case monitor.Removed:
-					wsConn.Send("WS: Removed old target")
+					wsConn.SendJSON(event)
+					// wsConn.SendText("WS: Removed old target")
 				}
 			}
 		}
