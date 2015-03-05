@@ -11,9 +11,8 @@ var (
 )
 
 const (
-	dockerStart   = "start"
-	dockerDestroy = "destroy"
-	endpoint      = "unix:///tmp/docker.sock"
+	dockerCreate = "create"
+	endpoint     = "unix:///tmp/docker.sock"
 )
 
 // Container ...
@@ -41,11 +40,13 @@ func StartEventListener(data *DataMonitor) {
 			case event := <-dockerEvents:
 				log.Printf("Received docker event status: %s, id: %s", event.Status, event.ID)
 
-				switch event.Status {
-				case dockerStart:
-					LoadVirtualHostsToURLS(data)
-				case dockerDestroy:
-					data.RemoveTarget("http://twitter.com/")
+				// only cares to created containers
+				if event.Status == "create" {
+					virtualHost := getVirtualHost(event.ID)
+					if virtualHost != "" {
+						// assumes all virtual host are http for while
+						data.AddTarget("http://" + virtualHost)
+					}
 				}
 			}
 		}
@@ -53,8 +54,8 @@ func StartEventListener(data *DataMonitor) {
 	}()
 }
 
-// LoadVirtualHostsToURLS ...
-func LoadVirtualHostsToURLS(data *DataMonitor) {
+// LoadAllVirtualHosts ...
+func LoadAllVirtualHosts(data *DataMonitor) {
 	filters := make(map[string][]string)
 	filters["status"] = []string{"running"}
 

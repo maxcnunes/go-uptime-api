@@ -37,7 +37,7 @@ func AsyncHTTPGets(urls []string) []*HTTPResponse {
 				return responses
 			}
 		case <-time.After(50 * time.Millisecond):
-			fmt.Println(".")
+			// fmt.Println(".")
 		}
 	}
 

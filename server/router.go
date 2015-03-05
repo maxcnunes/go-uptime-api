@@ -35,7 +35,7 @@ func (r Router) checkTargetsEvery10seconds() {
 		for {
 			select {
 			case <-ticker.C:
-				fmt.Printf("Checking %d URLs status...", len(r.data.Targets))
+				fmt.Printf("Checking %d URLs status...", len(r.data.GetAllTargets()))
 				checkTargetsStatus(r.data)
 			}
 		}
@@ -43,15 +43,58 @@ func (r Router) checkTargetsEvery10seconds() {
 }
 
 func (r Router) listHandler(rw http.ResponseWriter, req *http.Request) {
-	rw.Header().Set("Content-Type", "application/json")
-	rw.Header().Set("Access-Control-Allow-Origin", "*")
-
-	j, err := json.Marshal(r.data.Targets)
+	j, err := json.Marshal(r.data.GetAllTargets())
 	if err != nil {
 		panic(err)
 	}
 
+	rw.Header().Set("Content-Type", "application/json")
+	rw.Header().Set("Access-Control-Allow-Origin", "*")
 	rw.Write(j)
+}
+
+func (r Router) createHanler(rw http.ResponseWriter, req *http.Request) {
+	var target monitor.Target
+
+	err := json.NewDecoder(req.Body).Decode(&target)
+	if err != nil {
+		panic(err)
+	}
+
+	r.data.AddTarget(target.URL)
+
+	rw.Header().Set("Access-Control-Allow-Origin", "*")
+	rw.WriteHeader(http.StatusCreated)
+}
+
+func (r Router) deleteHandler(rw http.ResponseWriter, req *http.Request) {
+	vars := mux.Vars(req)
+
+	r.data.RemoveTargetByID(vars["id"])
+
+	rw.Header().Set("Access-Control-Allow-Origin", "*")
+	rw.WriteHeader(http.StatusOK)
+}
+
+func (r Router) updateHandler(rw http.ResponseWriter, req *http.Request) {
+	vars := mux.Vars(req)
+	var target monitor.Target
+
+	err := json.NewDecoder(req.Body).Decode(&target)
+	if err != nil {
+		panic(err)
+	}
+
+	r.data.UpdateTarget(vars["id"], target)
+
+	if err != nil {
+		panic(err)
+	}
+
+	log.Printf("Updated target %s with new URL %s", vars["id"], target.URL)
+
+	rw.Header().Set("Access-Control-Allow-Origin", "*")
+	rw.WriteHeader(http.StatusNoContent)
 }
 
 // Start ...
@@ -65,6 +108,9 @@ func (r Router) Start(data *monitor.DataMonitor) *mux.Router {
 
 	router := mux.NewRouter()
 	router.HandleFunc("/", r.listHandler).Methods("GET")
+	router.HandleFunc("/", r.createHanler).Methods("POST")
+	router.HandleFunc("/{id}", r.updateHandler).Methods("PUT")
+	router.HandleFunc("/{id}", r.deleteHandler).Methods("DELETE")
 
 	return router
 }

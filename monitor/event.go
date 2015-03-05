@@ -2,8 +2,8 @@ package monitor
 
 // Event ...
 type Event struct {
-	Event  string `json:"event"`
-	Target Target `json:"target"`
+	Event  string  `json:"event"`
+	Target *Target `json:"target"`
 }
 
 const (

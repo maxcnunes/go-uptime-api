@@ -1,8 +1,17 @@
+mongo:
+  image: mongo:2.6
+
 server:
   build: .
   command: go run main.go
   ports:
-    - "0.0.0.0:3000:3000"
+    - 3000
   volumes:
     - .:/go/src/github.com/maxcnunes/monitor-api
     - /var/run/docker.sock:/tmp/docker.sock
+  environment:
+    MONGODB_DATABASE: monitor-api
+    VIRTUAL_PORT: 3000
+    VIRTUAL_HOST: monitor-service.local.bravi.com.br
+  links:
+    - mongo:mongo
