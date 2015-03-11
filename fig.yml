@@ -1,7 +1,7 @@
 mongo:
   image: mongo:2.6
 
-server:
+local:
   build: .
   command: go run main.go
   ports:
