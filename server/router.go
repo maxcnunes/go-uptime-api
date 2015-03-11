@@ -49,7 +49,6 @@ func (r Router) listHandler(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	rw.Header().Set("Content-Type", "application/json")
-	rw.Header().Set("Access-Control-Allow-Origin", "*")
 	rw.Write(j)
 }
 
@@ -63,7 +62,6 @@ func (r Router) createHanler(rw http.ResponseWriter, req *http.Request) {
 
 	r.data.AddTarget(target.URL)
 
-	rw.Header().Set("Access-Control-Allow-Origin", "*")
 	rw.WriteHeader(http.StatusCreated)
 }
 
@@ -72,7 +70,6 @@ func (r Router) deleteHandler(rw http.ResponseWriter, req *http.Request) {
 
 	r.data.RemoveTargetByID(vars["id"])
 
-	rw.Header().Set("Access-Control-Allow-Origin", "*")
 	rw.WriteHeader(http.StatusOK)
 }
 
@@ -93,7 +90,6 @@ func (r Router) updateHandler(rw http.ResponseWriter, req *http.Request) {
 
 	log.Printf("Updated target %s with new URL %s", vars["id"], target.URL)
 
-	rw.Header().Set("Access-Control-Allow-Origin", "*")
 	rw.WriteHeader(http.StatusNoContent)
 }
 
@@ -107,10 +103,23 @@ func (r Router) Start(data *monitor.DataMonitor) *mux.Router {
 	log.Print("Starting API server")
 
 	router := mux.NewRouter()
-	router.HandleFunc("/", r.listHandler).Methods("GET")
-	router.HandleFunc("/", r.createHanler).Methods("POST")
-	router.HandleFunc("/{id}", r.updateHandler).Methods("PUT")
-	router.HandleFunc("/{id}", r.deleteHandler).Methods("DELETE")
+	router.HandleFunc("/", addDefaultHeaders(r.listHandler)).Methods("GET", "OPTIONS")
+	router.HandleFunc("/", addDefaultHeaders(r.createHanler)).Methods("POST")
+	router.HandleFunc("/{id}", addDefaultHeaders(r.updateHandler)).Methods("PUT")
+	router.HandleFunc("/{id}", addDefaultHeaders(r.deleteHandler)).Methods("DELETE")
 
 	return router
+}
+
+func addDefaultHeaders(fn http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		log.Printf("Origin %s", r.Header.Get("Origin"))
+		if origin := r.Header.Get("Origin"); origin != "" {
+			w.Header().Set("Access-Control-Allow-Origin", origin)
+		}
+		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token")
+		w.Header().Set("Access-Control-Allow-Credentials", "true")
+		fn(w, r)
+	}
 }
