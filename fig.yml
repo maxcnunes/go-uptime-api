@@ -14,5 +14,6 @@ local:
     VIRTUAL_PORT: 3000
     VIRTUAL_HOST: monitor-service.local.bravi.com.br
     PORT_BEHIND_PROXY: 3001
+    CHECK_TARGETS_AT_EVERY: 1m # 1 minute
   links:
     - mongo:mongo

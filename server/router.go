@@ -2,44 +2,15 @@ package server
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/maxcnunes/monitor-api/monitor"
 	"log"
 	"net/http"
-	"time"
 )
 
 // Router ...
 type Router struct {
 	data *monitor.DataMonitor
-}
-
-func checkTargetsStatus(data *monitor.DataMonitor) {
-	results := monitor.AsyncHTTPGets(data.GetAllURLS())
-	for _, result := range results {
-		if result.Response != nil {
-			fmt.Printf("%s status: %s\n", result.URL, result.Response.Status)
-		}
-	}
-}
-
-func (r Router) checkTargetsEvery10seconds() {
-	// temp examples
-	r.data.AddTarget("https://google.com/")
-	r.data.AddTarget("http://twitter.com/")
-
-	monitor.StartEventListener(r.data)
-	ticker := time.NewTicker(time.Second * 10)
-	go func() {
-		for {
-			select {
-			case <-ticker.C:
-				fmt.Printf("Checking %d URLs status...", len(r.data.GetAllTargets()))
-				checkTargetsStatus(r.data)
-			}
-		}
-	}()
 }
 
 func (r Router) listHandler(rw http.ResponseWriter, req *http.Request) {
@@ -97,9 +68,6 @@ func (r Router) updateHandler(rw http.ResponseWriter, req *http.Request) {
 func (r Router) Start(data *monitor.DataMonitor) *mux.Router {
 	r.data = data
 
-	log.Print("Starting targets checking async (every 10 sec)")
-	r.checkTargetsEvery10seconds()
-
 	log.Print("Starting API server")
 
 	router := mux.NewRouter()
@@ -113,7 +81,6 @@ func (r Router) Start(data *monitor.DataMonitor) *mux.Router {
 
 func addDefaultHeaders(fn http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("Origin %s", r.Header.Get("Origin"))
 		if origin := r.Header.Get("Origin"); origin != "" {
 			w.Header().Set("Access-Control-Allow-Origin", origin)
 		}
