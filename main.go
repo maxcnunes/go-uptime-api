@@ -1,11 +1,11 @@
 package main
 
 import (
-	"flag"
 	"github.com/maxcnunes/monitor-api/monitor"
 	"github.com/maxcnunes/monitor-api/server"
 	"log"
 	"net/http"
+	"os"
 )
 
 var (
@@ -13,11 +13,17 @@ var (
 	data      = monitor.DataMonitor{}
 	router    = server.Router{}
 	websocket = server.Websocket{}
-	addr      = flag.String("addr", ":3000", "http service address")
 )
 
 func main() {
-	flag.Parse()
+	var addr string
+	if env := os.Getenv("PORT_BEHIND_PROXY"); env != "" {
+		addr = ":" + env
+	} else if env := os.Getenv("VIRTUAL_PORT"); env != "" {
+		addr = ":" + env
+	} else {
+		addr = ":3000"
+	}
 
 	db.Start()
 	defer db.Close()
@@ -27,8 +33,8 @@ func main() {
 	http.Handle("/", router.Start(&data))
 	http.HandleFunc("/ws", websocket.Start(&data))
 
-	log.Printf("Server running on http://0.0.0.0:%d", *addr)
-	if err := http.ListenAndServe(*addr, nil); err != nil {
+	log.Printf("Server running on http://%s", addr)
+	if err := http.ListenAndServe(addr, nil); err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
 }

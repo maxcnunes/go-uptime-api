@@ -3,7 +3,7 @@ mongo:
 
 local:
   build: .
-  command: go run main.go
+  command: gin
   ports:
     - 3000
   volumes:
@@ -13,5 +13,6 @@ local:
     MONGODB_DATABASE: monitor-api
     VIRTUAL_PORT: 3000
     VIRTUAL_HOST: monitor-service.local.bravi.com.br
+    PORT_BEHIND_PROXY: 3001
   links:
     - mongo:mongo
