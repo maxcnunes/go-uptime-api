@@ -4,7 +4,7 @@ WORKDIR /go/src/github.com/maxcnunes/monitor-api
 
 ADD . /go/src/github.com/maxcnunes/monitor-api
 
-RUN go get -d ./...
+RUN go get -d -v ./...
 
 # dev environment
 RUN go get github.com/codegangsta/gin \
