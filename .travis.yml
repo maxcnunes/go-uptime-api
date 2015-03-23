@@ -1,0 +1,18 @@
+language: go
+go:
+  - 1.4
+env:
+  global:
+    - MONGO_PORT=tcp://127.0.0.1:27017
+    - MONGODB_DATABASE=monitor-api
+    - VIRTUAL_PORT=3000
+    - VIRTUAL_HOST=fake-domain.com
+    - CHECK_TARGETS_AT_EVERY=1d
+services:
+  - mongodb
+install:
+  - go get -d -v ./...
+  - go get -v github.com/onsi/ginkgo/ginkgo
+  - go get -v github.com/onsi/gomega
+script:
+  - ginkgo -r -v --randomizeAllSpecs --randomizeSuites --failOnPending --trace --race --compilers=2

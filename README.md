@@ -1,5 +1,7 @@
 # Monitor
 
+[![Build Status](https://travis-ci.org/maxcnunes/monitor-api.svg?branch=master)](https://travis-ci.org/maxcnunes/monitor-api)
+
 Simple monitor server to check uptime services (or any other http target).
 
 # Developing
