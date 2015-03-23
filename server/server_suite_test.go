@@ -51,7 +51,7 @@ var _ = AfterEach(func() {
 //
 
 // Request sends a new request to the server been tested
-func Request(method string, route string, handler http.HandlerFunc, result interface{}, body interface{}) *httptest.ResponseRecorder {
+func Request(method string, route string, result interface{}, body interface{}) *httptest.ResponseRecorder {
 	bodyRequest := parseBodyRequest(body)
 
 	request, _ := http.NewRequest(method, route, bodyRequest)
