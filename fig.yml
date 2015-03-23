@@ -1,7 +1,7 @@
 mongo:
   image: mongo:2.6
 
-local:
+local: &LOCAL
   build: .
   command: gin
   ports:
@@ -9,7 +9,7 @@ local:
   volumes:
     - .:/go/src/github.com/maxcnunes/monitor-api
     - /var/run/docker.sock:/tmp/docker.sock
-  environment:
+  environment: &LOCAL-ENVIRONMENT
     MONGODB_DATABASE: monitor-api
     VIRTUAL_PORT: 3000
     VIRTUAL_HOST: monitor-service.local.dockito.org
@@ -17,3 +17,10 @@ local:
     CHECK_TARGETS_AT_EVERY: 1m # 1 minute
   links:
     - mongo:mongo
+
+test:
+  <<: *LOCAL
+  command: ginkgo watch -p -r -race -failOnPending -randomizeAllSpecs
+  environment:
+    <<: *LOCAL-ENVIRONMENT
+    MONGODB_DATABASE: monitor-api-test

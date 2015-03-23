@@ -1,11 +1,12 @@
 package monitor
 
 import (
-	"gopkg.in/mgo.v2"
 	"log"
 	"net"
 	"net/url"
 	"os"
+
+	"gopkg.in/mgo.v2"
 )
 
 // DB ...
@@ -53,4 +54,9 @@ func (db *DB) Start() {
 // Close ...
 func (db *DB) Close() {
 	db.Session.Close()
+}
+
+// Wipe the whole database. Use it only in test environment.
+func (db *DB) Wipe() {
+	db.Session.DB(db.DBName).C("target").RemoveAll(nil)
 }

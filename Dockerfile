@@ -6,4 +6,7 @@ ADD . /go/src/github.com/maxcnunes/monitor-api
 
 RUN go get -d ./...
 
-RUN go get github.com/codegangsta/gin
+# dev environment
+RUN go get github.com/codegangsta/gin \
+           github.com/onsi/ginkgo/ginkgo \
+           github.com/onsi/gomega

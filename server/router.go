@@ -2,10 +2,11 @@ package server
 
 import (
 	"encoding/json"
-	"github.com/gorilla/mux"
-	"github.com/maxcnunes/monitor-api/monitor"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
+	"github.com/maxcnunes/monitor-api/monitor"
 )
 
 // Router ...
@@ -13,7 +14,8 @@ type Router struct {
 	data *monitor.DataMonitor
 }
 
-func (r Router) listHandler(rw http.ResponseWriter, req *http.Request) {
+// ListHandler ...
+func (r *Router) ListHandler(rw http.ResponseWriter, req *http.Request) {
 	j, err := json.Marshal(r.data.GetAllTargets())
 	if err != nil {
 		panic(err)
@@ -23,7 +25,8 @@ func (r Router) listHandler(rw http.ResponseWriter, req *http.Request) {
 	rw.Write(j)
 }
 
-func (r Router) createHanler(rw http.ResponseWriter, req *http.Request) {
+// CreateHanler ...
+func (r *Router) CreateHanler(rw http.ResponseWriter, req *http.Request) {
 	var target monitor.Target
 
 	err := json.NewDecoder(req.Body).Decode(&target)
@@ -36,7 +39,8 @@ func (r Router) createHanler(rw http.ResponseWriter, req *http.Request) {
 	rw.WriteHeader(http.StatusCreated)
 }
 
-func (r Router) deleteHandler(rw http.ResponseWriter, req *http.Request) {
+// DeleteHandler ...
+func (r *Router) DeleteHandler(rw http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
 
 	r.data.RemoveTargetByID(vars["id"])
@@ -44,7 +48,8 @@ func (r Router) deleteHandler(rw http.ResponseWriter, req *http.Request) {
 	rw.WriteHeader(http.StatusOK)
 }
 
-func (r Router) updateHandler(rw http.ResponseWriter, req *http.Request) {
+// UpdateHandler ...
+func (r *Router) UpdateHandler(rw http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
 	var target monitor.Target
 
@@ -65,16 +70,16 @@ func (r Router) updateHandler(rw http.ResponseWriter, req *http.Request) {
 }
 
 // Start ...
-func (r Router) Start(data *monitor.DataMonitor) *mux.Router {
+func (r *Router) Start(data *monitor.DataMonitor) *mux.Router {
 	r.data = data
 
 	log.Print("Starting API server")
 
 	router := mux.NewRouter()
-	router.HandleFunc("/", addDefaultHeaders(r.listHandler)).Methods("GET", "OPTIONS")
-	router.HandleFunc("/", addDefaultHeaders(r.createHanler)).Methods("POST")
-	router.HandleFunc("/{id}", addDefaultHeaders(r.updateHandler)).Methods("PUT")
-	router.HandleFunc("/{id}", addDefaultHeaders(r.deleteHandler)).Methods("DELETE")
+	router.HandleFunc("/", addDefaultHeaders(r.ListHandler)).Methods("GET", "OPTIONS")
+	router.HandleFunc("/", addDefaultHeaders(r.CreateHanler)).Methods("POST")
+	router.HandleFunc("/{id}", addDefaultHeaders(r.UpdateHandler)).Methods("PUT")
+	router.HandleFunc("/{id}", addDefaultHeaders(r.DeleteHandler)).Methods("DELETE")
 
 	return router
 }
