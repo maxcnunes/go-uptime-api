@@ -15,7 +15,7 @@ var (
 )
 
 var _ = Describe("server", func() {
-	Context("Performing GET request to root route", func() {
+	Context("Performing GET request to '/targets' route", func() {
 		BeforeEach(func() {
 			data.AddTarget("http://first-targe.com")
 		})
@@ -34,7 +34,7 @@ var _ = Describe("server", func() {
 		})
 	})
 
-	Context("Performing POST request to root route", func() {
+	Context("Performing POST request to '/targets' route", func() {
 		It("returns a 201 Status Code", func() {
 			target := monitor.Target{URL: "http://second-targe.com"}
 			response := Request("POST", "/targets", nil, target)
@@ -42,7 +42,7 @@ var _ = Describe("server", func() {
 		})
 	})
 
-	Context("Performing PUT request to root route", func() {
+	Context("Performing PUT request to '/targets' route", func() {
 		var target *monitor.Target
 		var result monitor.Target
 
@@ -68,7 +68,7 @@ var _ = Describe("server", func() {
 		})
 	})
 
-	Context("Performing DELETE request to root route", func() {
+	Context("Performing DELETE request to '/targets' route", func() {
 		var target *monitor.Target
 		BeforeEach(func() {
 			target = data.AddTarget("http://first-targe.com")
@@ -77,6 +77,29 @@ var _ = Describe("server", func() {
 		It("returns a 200 Status Code", func() {
 			response := Request("DELETE", "/targets/"+target.ID.Hex(), nil, nil)
 			Expect(response.Code).To(Equal(http.StatusOK))
+		})
+	})
+
+	Context("Performing GET request to '/tracks' route", func() {
+		var target *monitor.Target
+
+		BeforeEach(func() {
+			target = data.AddTarget("http://first-targe.com")
+			data.AddTrack(target.ID.Hex(), monitor.StatusUp)
+		})
+
+		It("returns a 200 Status Code", func() {
+			response := Request("GET", "/tracks", nil, nil)
+			Expect(response.Code).To(Equal(http.StatusOK))
+		})
+
+		It("returns a list of tracks", func() {
+			var result []monitor.Track
+			_ = Request("GET", "/tracks", &result, nil)
+
+			Expect(len(result)).To(Equal(1))
+			Expect(result[0].TargetID).To(Equal(target.ID))
+			Expect(result[0].Status).To(Equal(monitor.StatusUp))
 		})
 	})
 })

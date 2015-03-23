@@ -59,4 +59,5 @@ func (db *DB) Close() {
 // Wipe the whole database. Use it only in test environment.
 func (db *DB) Wipe() {
 	db.Session.DB(db.DBName).C("target").RemoveAll(nil)
+	db.Session.DB(db.DBName).C("track").RemoveAll(nil)
 }

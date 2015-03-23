@@ -12,7 +12,12 @@ type DataMonitor struct {
 	DB     DB
 	Events chan Event
 	target *mgo.Collection
+	track  *mgo.Collection
 }
+
+//
+// Targets
+//
 
 // GetTargetByURL ...
 func (d *DataMonitor) GetTargetByURL(url string) *Target {
@@ -160,9 +165,42 @@ func (d *DataMonitor) GetAllTargets() []Target {
 	return targets
 }
 
+//
+// Tracks
+//
+
+// GetAllTracks ...
+func (d *DataMonitor) GetAllTracks() []Track {
+	tracks := []Track{}
+
+	err := d.track.Find(nil).All(&tracks)
+	if err != nil {
+		log.Printf("got an error finding a doc %v\n", err)
+	}
+
+	return tracks
+}
+
+// AddTrack ...
+func (d *DataMonitor) AddTrack(targetID string, status string) *Track {
+	target := d.GetTargetByID(targetID)
+	if target == nil {
+		log.Printf("Can't find document with target id: %s\n", targetID)
+		return nil
+	}
+
+	doc := Track{ID: bson.NewObjectId(), TargetID: target.ID, Status: status}
+	if err := d.track.Insert(doc); err != nil {
+		log.Printf("Can't insert document: %v\n", err)
+	}
+
+	return &doc
+}
+
 // Start ...
 func (d *DataMonitor) Start(db DB) {
 	d.DB = db
 	d.Events = make(chan Event)
 	d.target = d.DB.Session.DB(d.DB.DBName).C("target")
+	d.track = d.DB.Session.DB(d.DB.DBName).C("track")
 }

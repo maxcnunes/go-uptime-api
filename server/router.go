@@ -15,6 +15,7 @@ type Router struct{}
 
 var (
 	targetAPI = api.TargetAPI{}
+	trackAPI  = api.TrackAPI{}
 )
 
 // Start ...
@@ -28,6 +29,10 @@ func (r *Router) Start(data *monitor.DataMonitor) *mux.Router {
 	router.HandleFunc("/targets", addDefaultHeaders(targetAPI.CreateHanler)).Methods("POST")
 	router.HandleFunc("/targets/{id}", addDefaultHeaders(targetAPI.UpdateHandler)).Methods("PUT")
 	router.HandleFunc("/targets/{id}", addDefaultHeaders(targetAPI.DeleteHandler)).Methods("DELETE")
+
+	// tracks api
+	trackAPI.Start(data)
+	router.HandleFunc("/tracks", addDefaultHeaders(trackAPI.ListHandler)).Methods("GET", "OPTIONS")
 
 	return router
 }
