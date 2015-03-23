@@ -21,13 +21,13 @@ var _ = Describe("server", func() {
 		})
 
 		It("returns a 200 Status Code", func() {
-			response := Request("GET", "/", router.ListHandler, nil, nil)
+			response := Request("GET", "/targets", router.ListHandler, nil, nil)
 			Expect(response.Code).To(Equal(http.StatusOK))
 		})
 
 		It("returns a list of targets", func() {
 			var result []monitor.Target
-			_ = Request("GET", "/", router.ListHandler, &result, nil)
+			_ = Request("GET", "/targets", router.ListHandler, &result, nil)
 
 			Expect(len(result)).To(Equal(1))
 			Expect(result[0].URL).To(Equal("http://first-targe.com"))
@@ -37,7 +37,7 @@ var _ = Describe("server", func() {
 	Context("Performing POST request to root route", func() {
 		It("returns a 201 Status Code", func() {
 			target := monitor.Target{URL: "http://second-targe.com"}
-			response := Request("POST", "/", router.CreateHanler, nil, target)
+			response := Request("POST", "/targets", router.CreateHanler, nil, target)
 			Expect(response.Code).To(Equal(http.StatusCreated))
 		})
 	})
@@ -54,12 +54,12 @@ var _ = Describe("server", func() {
 		})
 
 		It("returns a 200 Status Code", func() {
-			response := Request("PUT", "/"+target.ID.Hex(), router.UpdateHandler, &result, target)
+			response := Request("PUT", "/targets/"+target.ID.Hex(), router.UpdateHandler, &result, target)
 			Expect(response.Code).To(Equal(http.StatusOK))
 		})
 
 		It("updates the target in the database", func() {
-			_ = Request("PUT", "/"+target.ID.Hex(), router.UpdateHandler, &result, target)
+			_ = Request("PUT", "/targets/"+target.ID.Hex(), router.UpdateHandler, &result, target)
 
 			item := data.GetTargetByID(target.ID.Hex())
 
@@ -75,7 +75,7 @@ var _ = Describe("server", func() {
 		})
 
 		It("returns a 200 Status Code", func() {
-			response := Request("DELETE", "/"+target.ID.Hex(), router.DeleteHandler, nil, nil)
+			response := Request("DELETE", "/targets/"+target.ID.Hex(), router.DeleteHandler, nil, nil)
 			Expect(response.Code).To(Equal(http.StatusOK))
 		})
 	})

@@ -76,10 +76,10 @@ func (r *Router) Start(data *monitor.DataMonitor) *mux.Router {
 	log.Print("Starting API server")
 
 	router := mux.NewRouter()
-	router.HandleFunc("/", addDefaultHeaders(r.ListHandler)).Methods("GET", "OPTIONS")
-	router.HandleFunc("/", addDefaultHeaders(r.CreateHanler)).Methods("POST")
-	router.HandleFunc("/{id}", addDefaultHeaders(r.UpdateHandler)).Methods("PUT")
-	router.HandleFunc("/{id}", addDefaultHeaders(r.DeleteHandler)).Methods("DELETE")
+	router.HandleFunc("/targets", addDefaultHeaders(r.ListHandler)).Methods("GET", "OPTIONS")
+	router.HandleFunc("/targets", addDefaultHeaders(r.CreateHanler)).Methods("POST")
+	router.HandleFunc("/targets/{id}", addDefaultHeaders(r.UpdateHandler)).Methods("PUT")
+	router.HandleFunc("/targets/{id}", addDefaultHeaders(r.DeleteHandler)).Methods("DELETE")
 
 	return router
 }
