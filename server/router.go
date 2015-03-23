@@ -66,7 +66,7 @@ func (r *Router) UpdateHandler(rw http.ResponseWriter, req *http.Request) {
 
 	log.Printf("Updated target %s with new URL %s", vars["id"], target.URL)
 
-	rw.WriteHeader(http.StatusNoContent)
+	rw.WriteHeader(http.StatusOK)
 }
 
 // Start ...

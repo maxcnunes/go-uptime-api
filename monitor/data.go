@@ -47,10 +47,10 @@ func (d *DataMonitor) GetTargetByID(id string) *Target {
 }
 
 // AddTarget ...
-func (d *DataMonitor) AddTarget(url string) {
+func (d *DataMonitor) AddTarget(url string) *Target {
 	target := d.GetTargetByURL(url)
 	if target != nil {
-		return
+		return target
 	}
 
 	log.Printf("Adding target %s", url)
@@ -61,6 +61,8 @@ func (d *DataMonitor) AddTarget(url string) {
 	}
 
 	go func() { d.Events <- Event{Event: Added, Target: &doc} }()
+
+	return &doc
 }
 
 // RemoveTarget ...
