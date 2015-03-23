@@ -20,7 +20,7 @@ local: &LOCAL
 
 test:
   <<: *LOCAL
-  command: ginkgo watch -p -r -race -failOnPending -randomizeAllSpecs
+  command: ginkgo watch -v -p -r -race -failOnPending -randomizeAllSpecs
   environment:
     <<: *LOCAL-ENVIRONMENT
     MONGODB_DATABASE: monitor-api-test
