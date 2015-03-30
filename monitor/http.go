@@ -40,6 +40,4 @@ func AsyncHTTPGets(urls []string) []*HTTPResponse {
 			// fmt.Println(".")
 		}
 	}
-
-	return responses
 }

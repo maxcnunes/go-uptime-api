@@ -14,13 +14,13 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	"github.com/maxcnunes/monitor-api/monitor"
+	"github.com/maxcnunes/monitor-api/monitor/data"
 )
 
 var (
-	db       = monitor.DB{}
-	data     = monitor.DataMonitor{}
-	handlers *mux.Router
+	db          = data.DB{}
+	dataMonitor = data.DataMonitor{}
+	handlers    *mux.Router
 )
 
 func TestMonitorApi(t *testing.T) {
@@ -31,9 +31,9 @@ func TestMonitorApi(t *testing.T) {
 // Setup server's tests
 var _ = BeforeSuite(func() {
 	db.Start()
-	data.Start(db)
+	dataMonitor.Start(db)
 
-	handlers = router.Start(&data)
+	handlers = router.Start(&dataMonitor)
 })
 
 // Teardown server's tests

@@ -1,4 +1,4 @@
-package monitor
+package entities
 
 // Event ...
 type Event struct {

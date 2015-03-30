@@ -1,9 +1,11 @@
 package monitor
 
 import (
-	docker "github.com/fsouza/go-dockerclient"
 	"log"
 	"strings"
+
+	docker "github.com/fsouza/go-dockerclient"
+	"github.com/maxcnunes/monitor-api/monitor/data"
 )
 
 var (
@@ -22,7 +24,7 @@ type Container struct {
 }
 
 // StartEventListener ...
-func StartEventListener(data *DataMonitor) {
+func StartEventListener(data *data.DataMonitor) {
 	client, _ = docker.NewClient(endpoint)
 
 	dockerEvents := make(chan *docker.APIEvents)
@@ -45,17 +47,16 @@ func StartEventListener(data *DataMonitor) {
 					virtualHost := getVirtualHost(event.ID)
 					if virtualHost != "" {
 						// assumes all virtual host are http for while
-						data.AddTarget("http://" + virtualHost)
+						data.Target.Create("http://" + virtualHost)
 					}
 				}
 			}
 		}
-		log.Fatalf("Exitting the docker events loop")
 	}()
 }
 
 // LoadAllVirtualHosts ...
-func LoadAllVirtualHosts(data *DataMonitor) {
+func LoadAllVirtualHosts(data *data.DataMonitor) {
 	filters := make(map[string][]string)
 	filters["status"] = []string{"running"}
 
@@ -68,7 +69,7 @@ func LoadAllVirtualHosts(data *DataMonitor) {
 
 		if virtualHost != "" {
 			// assumes all virtual host are http for while
-			data.AddTarget("http://" + virtualHost)
+			data.Target.Create("http://" + virtualHost)
 		}
 	}
 }

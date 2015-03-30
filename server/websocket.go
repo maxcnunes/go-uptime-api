@@ -1,15 +1,17 @@
 package server
 
 import (
-	"github.com/gorilla/websocket"
-	"github.com/maxcnunes/monitor-api/monitor"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/websocket"
+	"github.com/maxcnunes/monitor-api/monitor/data"
+	"github.com/maxcnunes/monitor-api/monitor/entities"
 )
 
 // Websocket ...
 type Websocket struct {
-	data *monitor.DataMonitor
+	data *data.DataMonitor
 }
 
 type wsConnection struct {
@@ -37,9 +39,9 @@ func (ws wsConnection) SendJSON(json interface{}) {
 }
 
 // Start ...
-func (ws Websocket) Start(data *monitor.DataMonitor) func(http.ResponseWriter, *http.Request) {
+func (ws Websocket) Start(dm *data.DataMonitor) func(http.ResponseWriter, *http.Request) {
 	log.Print("Starting websocket server")
-	ws.data = data
+	ws.data = dm
 
 	return func(rw http.ResponseWriter, req *http.Request) {
 
@@ -55,10 +57,10 @@ func (ws Websocket) Start(data *monitor.DataMonitor) func(http.ResponseWriter, *
 			select {
 			case event := <-ws.data.Events:
 				switch event.Event {
-				case monitor.Added:
+				case entities.Added:
 					// wsConn.SendText("WS: Added new target")
 					wsConn.SendJSON(event)
-				case monitor.Removed:
+				case entities.Removed:
 					wsConn.SendJSON(event)
 					// wsConn.SendText("WS: Removed old target")
 				}

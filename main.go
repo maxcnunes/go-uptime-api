@@ -1,16 +1,18 @@
 package main
 
 import (
-	"github.com/maxcnunes/monitor-api/monitor"
-	"github.com/maxcnunes/monitor-api/server"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/maxcnunes/monitor-api/monitor"
+	dm "github.com/maxcnunes/monitor-api/monitor/data"
+	"github.com/maxcnunes/monitor-api/server"
 )
 
 var (
-	db        = monitor.DB{}
-	data      = monitor.DataMonitor{}
+	db        = dm.DB{}
+	data      = dm.DataMonitor{}
 	job       = monitor.Job{}
 	router    = server.Router{}
 	websocket = server.Websocket{}

@@ -4,22 +4,22 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/maxcnunes/monitor-api/monitor"
+	"github.com/maxcnunes/monitor-api/monitor/data"
 )
 
 // TrackAPI ...
 type TrackAPI struct {
-	data *monitor.DataMonitor
+	data *data.DataMonitor
 }
 
 // Start ...
-func (api *TrackAPI) Start(data *monitor.DataMonitor) {
+func (api *TrackAPI) Start(data *data.DataMonitor) {
 	api.data = data
 }
 
 // ListHandler ...
 func (api *TrackAPI) ListHandler(rw http.ResponseWriter, req *http.Request) {
-	j, err := json.Marshal(api.data.GetAllTracks())
+	j, err := json.Marshal(api.data.Track.GetAll())
 	if err != nil {
 		panic(err)
 	}

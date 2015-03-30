@@ -1,8 +1,6 @@
-package monitor
+package entities
 
-import (
-	"gopkg.in/mgo.v2/bson"
-)
+import "gopkg.in/mgo.v2/bson"
 
 // Track ...
 type Track struct {

@@ -7,7 +7,7 @@ import (
 	"github.com/maxcnunes/monitor-api/server/api"
 
 	"github.com/gorilla/mux"
-	"github.com/maxcnunes/monitor-api/monitor"
+	"github.com/maxcnunes/monitor-api/monitor/data"
 )
 
 // Router ...
@@ -19,7 +19,7 @@ var (
 )
 
 // Start ...
-func (r *Router) Start(data *monitor.DataMonitor) *mux.Router {
+func (r *Router) Start(data *data.DataMonitor) *mux.Router {
 	log.Print("Starting API server")
 	router := mux.NewRouter()
 

@@ -6,22 +6,23 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/maxcnunes/monitor-api/monitor"
+	"github.com/maxcnunes/monitor-api/monitor/data"
+	"github.com/maxcnunes/monitor-api/monitor/entities"
 )
 
 // TargetAPI ...
 type TargetAPI struct {
-	data *monitor.DataMonitor
+	data *data.DataMonitor
 }
 
 // Start ...
-func (api *TargetAPI) Start(data *monitor.DataMonitor) {
+func (api *TargetAPI) Start(data *data.DataMonitor) {
 	api.data = data
 }
 
 // ListHandler ...
 func (api *TargetAPI) ListHandler(rw http.ResponseWriter, req *http.Request) {
-	j, err := json.Marshal(api.data.GetAllTargets())
+	j, err := json.Marshal(api.data.Target.GetAll())
 	if err != nil {
 		panic(err)
 	}
@@ -32,14 +33,14 @@ func (api *TargetAPI) ListHandler(rw http.ResponseWriter, req *http.Request) {
 
 // CreateHanler ...
 func (api *TargetAPI) CreateHanler(rw http.ResponseWriter, req *http.Request) {
-	var target monitor.Target
+	var target entities.Target
 
 	err := json.NewDecoder(req.Body).Decode(&target)
 	if err != nil {
 		panic(err)
 	}
 
-	api.data.AddTarget(target.URL)
+	api.data.Target.Create(target.URL)
 
 	rw.WriteHeader(http.StatusCreated)
 }
@@ -48,7 +49,7 @@ func (api *TargetAPI) CreateHanler(rw http.ResponseWriter, req *http.Request) {
 func (api *TargetAPI) DeleteHandler(rw http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
 
-	api.data.RemoveTargetByID(vars["id"])
+	api.data.Target.RemoveByID(vars["id"])
 
 	rw.WriteHeader(http.StatusOK)
 }
@@ -56,14 +57,14 @@ func (api *TargetAPI) DeleteHandler(rw http.ResponseWriter, req *http.Request) {
 // UpdateHandler ...
 func (api *TargetAPI) UpdateHandler(rw http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
-	var target monitor.Target
+	var target entities.Target
 
 	err := json.NewDecoder(req.Body).Decode(&target)
 	if err != nil {
 		panic(err)
 	}
 
-	api.data.UpdateTarget(vars["id"], target)
+	api.data.Target.Update(vars["id"], target)
 
 	if err != nil {
 		panic(err)
