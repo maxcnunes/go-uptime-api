@@ -19,7 +19,13 @@ func (api *TrackAPI) Start(data *data.DataMonitor) {
 
 // ListHandler ...
 func (api *TrackAPI) ListHandler(rw http.ResponseWriter, req *http.Request) {
-	j, err := json.Marshal(api.data.Track.GetAll())
+	query := req.URL.Query()
+	targetID := ""
+	if len(query["targetId"]) > 0 {
+		targetID = query["targetId"][0]
+	}
+
+	j, err := json.Marshal(api.data.Track.Find(targetID))
 	if err != nil {
 		panic(err)
 	}
