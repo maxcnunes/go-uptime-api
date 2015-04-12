@@ -2,6 +2,7 @@ package monitor
 
 import (
 	"log"
+	"net/http"
 	"time"
 
 	"github.com/maxcnunes/monitor-api/monitor/data"
@@ -16,9 +17,14 @@ type Job struct {
 func (j Job) checkTargetsStatus() {
 	results := AsyncHTTPGets(j.data.Target.GetAllURLS())
 	for _, result := range results {
+		status := http.StatusBadGateway
 		if result.Response != nil {
 			log.Printf("%s status: %s\n", result.URL, result.Response.Status)
+			status = result.Response.StatusCode
 		}
+
+		target := j.data.Target.FindOneByURL(result.URL)
+		j.data.Track.Create(*target, status)
 	}
 }
 

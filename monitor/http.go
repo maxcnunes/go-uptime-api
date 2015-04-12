@@ -31,7 +31,7 @@ func AsyncHTTPGets(urls []string) []*HTTPResponse {
 	for {
 		select {
 		case r := <-ch:
-			fmt.Printf("%s was fetched\n", r.URL)
+			fmt.Printf("%s was fetched: %v\n", r.URL, r)
 			responses = append(responses, r)
 			if len(responses) == len(urls) {
 				return responses

@@ -50,7 +50,7 @@ var _ = Describe("server", func() {
 			target = dataMonitor.Target.Create("http://first-targe.com")
 
 			target.URL = "http://updated-targe.com"
-			target.Status = entities.StatusDown
+			target.Status = http.StatusBadGateway
 		})
 
 		It("returns a 200 Status Code", func() {
@@ -85,7 +85,7 @@ var _ = Describe("server", func() {
 
 		BeforeEach(func() {
 			target = dataMonitor.Target.Create("http://first-targe.com")
-			dataMonitor.Track.Create(*target, entities.StatusUp)
+			dataMonitor.Track.Create(*target, http.StatusCreated)
 		})
 
 		It("returns a 200 Status Code", func() {
@@ -99,7 +99,7 @@ var _ = Describe("server", func() {
 
 			Expect(len(result)).To(Equal(1))
 			Expect(result[0].TargetID).To(Equal(target.ID))
-			Expect(result[0].Status).To(Equal(entities.StatusUp))
+			Expect(result[0].Status).To(Equal(http.StatusCreated))
 		})
 	})
 })

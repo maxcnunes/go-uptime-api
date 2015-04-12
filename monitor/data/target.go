@@ -55,7 +55,7 @@ func (d *DataTarget) Create(url string) *entities.Target {
 
 	log.Printf("Adding target %s", url)
 
-	doc := entities.Target{ID: bson.NewObjectId(), URL: url, Status: entities.StatusNone}
+	doc := entities.Target{ID: bson.NewObjectId(), URL: url, Status: 0}
 	if err := d.collection.Insert(doc); err != nil {
 		log.Printf("Can't insert document: %v\n", err)
 	}
@@ -126,7 +126,7 @@ func (d *DataTarget) Update(id string, data entities.Target) {
 		return
 	}
 
-	log.Printf("Updating url %s to status %s", target.URL, target.Status)
+	log.Printf("Updating url %s to status %d", target.URL, target.Status)
 	err := d.collection.Update(bson.M{"_id": target.ID}, bson.M{"url": data.URL, "status": data.Status})
 	if err != nil {
 		log.Printf("Can't update document: %v\n", err)
