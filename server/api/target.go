@@ -31,6 +31,18 @@ func (api *TargetAPI) ListHandler(rw http.ResponseWriter, req *http.Request) {
 	rw.Write(j)
 }
 
+// DetailHandler ...
+func (api *TargetAPI) DetailHandler(rw http.ResponseWriter, req *http.Request) {
+	vars := mux.Vars(req)
+	j, err := json.Marshal(api.data.Target.FindOneByID(vars["id"]))
+	if err != nil {
+		panic(err)
+	}
+
+	rw.Header().Set("Content-Type", "application/json")
+	rw.Write(j)
+}
+
 // CreateHanler ...
 func (api *TargetAPI) CreateHanler(rw http.ResponseWriter, req *http.Request) {
 	var target entities.Target
