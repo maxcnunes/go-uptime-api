@@ -25,6 +25,8 @@ func (j Job) checkTargetsStatus() {
 
 		target := j.data.Target.FindOneByURL(result.URL)
 		j.data.Track.Create(*target, status)
+		target.Status = status
+		j.data.Target.Update(target.ID.Hex(), *target)
 	}
 }
 
