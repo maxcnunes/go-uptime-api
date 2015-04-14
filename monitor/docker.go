@@ -47,7 +47,7 @@ func StartEventListener(data *data.DataMonitor) {
 					virtualHost := getVirtualHost(event.ID)
 					if virtualHost != "" {
 						// assumes all virtual host are http for while
-						data.Target.Create("http://" + virtualHost)
+						data.Target.Create("http://"+virtualHost, nil)
 					}
 				}
 			}
@@ -69,7 +69,7 @@ func LoadAllVirtualHosts(data *data.DataMonitor) {
 
 		if virtualHost != "" {
 			// assumes all virtual host are http for while
-			data.Target.Create("http://" + virtualHost)
+			data.Target.Create("http://"+virtualHost, nil)
 		}
 	}
 }

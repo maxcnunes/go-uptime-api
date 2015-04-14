@@ -52,7 +52,7 @@ func (api *TargetAPI) CreateHanler(rw http.ResponseWriter, req *http.Request) {
 		panic(err)
 	}
 
-	api.data.Target.Create(target.URL)
+	api.data.Target.Create(target.URL, target.Emails)
 
 	rw.WriteHeader(http.StatusCreated)
 }

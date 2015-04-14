@@ -47,7 +47,7 @@ func (d *DataTarget) FindOneByID(id string) *entities.Target {
 }
 
 // Create ...
-func (d *DataTarget) Create(url string) *entities.Target {
+func (d *DataTarget) Create(url string, emails []string) *entities.Target {
 	target := d.FindOneByURL(url)
 	if target != nil {
 		return target
@@ -55,7 +55,7 @@ func (d *DataTarget) Create(url string) *entities.Target {
 
 	log.Printf("Adding target %s", url)
 
-	doc := entities.Target{ID: bson.NewObjectId(), URL: url, Status: 0}
+	doc := entities.Target{ID: bson.NewObjectId(), URL: url, Status: 0, Emails: emails}
 	if err := d.collection.Insert(doc); err != nil {
 		log.Printf("Can't insert document: %v\n", err)
 	}
@@ -127,7 +127,7 @@ func (d *DataTarget) Update(id string, data entities.Target) {
 	}
 
 	log.Printf("Updating url %s to status %d", target.URL, target.Status)
-	err := d.collection.Update(bson.M{"_id": target.ID}, bson.M{"url": data.URL, "status": data.Status})
+	err := d.collection.UpdateId(target.ID, bson.M{"$set": bson.M{"url": data.URL, "status": data.Status}})
 	if err != nil {
 		log.Printf("Can't update document: %v\n", err)
 	}
