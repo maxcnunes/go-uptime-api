@@ -17,7 +17,7 @@ var (
 var _ = Describe("server", func() {
 	Context("Performing GET request to '/targets' route", func() {
 		BeforeEach(func() {
-			dataMonitor.Target.Create("http://first-targe.com")
+			dataMonitor.Target.Create("http://first-targe.com", nil)
 		})
 
 		It("returns a 200 Status Code", func() {
@@ -47,7 +47,7 @@ var _ = Describe("server", func() {
 		var result entities.Target
 
 		BeforeEach(func() {
-			target = dataMonitor.Target.Create("http://first-targe.com")
+			target = dataMonitor.Target.Create("http://first-targe.com", nil)
 
 			target.URL = "http://updated-targe.com"
 			target.Status = http.StatusBadGateway
@@ -71,7 +71,7 @@ var _ = Describe("server", func() {
 	Context("Performing DELETE request to '/targets' route", func() {
 		var target *entities.Target
 		BeforeEach(func() {
-			target = dataMonitor.Target.Create("http://first-targe.com")
+			target = dataMonitor.Target.Create("http://first-targe.com", nil)
 		})
 
 		It("returns a 200 Status Code", func() {
@@ -84,7 +84,7 @@ var _ = Describe("server", func() {
 		var target *entities.Target
 
 		BeforeEach(func() {
-			target = dataMonitor.Target.Create("http://first-targe.com")
+			target = dataMonitor.Target.Create("http://first-targe.com", nil)
 			dataMonitor.Track.Create(*target, http.StatusCreated)
 		})
 
