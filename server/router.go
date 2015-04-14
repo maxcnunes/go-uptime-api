@@ -27,7 +27,7 @@ func (r *Router) Start(data *data.DataMonitor) *mux.Router {
 	targetAPI.Start(data)
 	router.HandleFunc("/targets", addDefaultHeaders(targetAPI.ListHandler)).Methods("GET", "OPTIONS")
 	router.HandleFunc("/targets", addDefaultHeaders(targetAPI.CreateHanler)).Methods("POST")
-	router.HandleFunc("/targets/{id}", addDefaultHeaders(targetAPI.DetailHandler)).Methods("GET")
+	router.HandleFunc("/targets/{id}", addDefaultHeaders(targetAPI.DetailHandler)).Methods("GET", "OPTIONS")
 	router.HandleFunc("/targets/{id}", addDefaultHeaders(targetAPI.UpdateHandler)).Methods("PUT")
 	router.HandleFunc("/targets/{id}", addDefaultHeaders(targetAPI.DeleteHandler)).Methods("DELETE")
 
