@@ -23,15 +23,24 @@ func (j Job) checkTargetsStatus() {
 			status = result.Response.StatusCode
 		}
 
-		target := j.data.Target.FindOneByURL(result.URL)
-		j.data.Track.Create(*target, status)
-		target.Status = status
-		j.data.Target.Update(target.ID.Hex(), *target)
+		j.saveTracking(result.URL, status)
+	}
+}
+
+func (j Job) saveTracking(url string, status int) {
+	target := j.data.Target.FindOneByURL(url)
+	oldStatus := target.Status
+	j.data.Track.Create(*target, status)
+	target.Status = status
+	j.data.Target.Update(target.ID.Hex(), *target)
+
+	// sends notification only if the status has changed
+	if oldStatus != status {
+		SendNotificaton(*target)
 	}
 }
 
 func (j Job) checkTargetsPeriodically() {
-
 	StartEventListener(j.data)
 
 	ticker := time.NewTicker(j.checkAtEvery)
