@@ -61,7 +61,9 @@ func (api *TargetAPI) CreateHanler(rw http.ResponseWriter, req *http.Request) {
 func (api *TargetAPI) DeleteHandler(rw http.ResponseWriter, req *http.Request) {
 	vars := mux.Vars(req)
 
-	api.data.Target.RemoveByID(vars["id"])
+	targetID := vars["id"]
+	api.data.Target.RemoveByID(targetID)
+	api.data.Track.RemoveByTargetID(targetID)
 
 	rw.WriteHeader(http.StatusOK)
 }

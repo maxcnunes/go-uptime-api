@@ -93,7 +93,7 @@ func (d *DataTarget) RemoveByID(id string) {
 
 	log.Printf("Removing url %s", target.URL)
 
-	err := d.collection.Remove(bson.M{"url": target.URL})
+	err := d.collection.Remove(bson.M{"_id": target.ID})
 	if err != nil {
 		log.Printf("Can't delete document: %v\n", err)
 	}

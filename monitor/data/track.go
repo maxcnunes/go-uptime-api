@@ -47,6 +47,14 @@ func (d *DataTrack) Create(target entities.Target, status int) *entities.Track {
 	return &doc
 }
 
+// RemoveByTargetID ...
+func (d *DataTrack) RemoveByTargetID(id string) {
+	err := d.collection.Remove(bson.M{"targetId": bson.ObjectIdHex(id)})
+	if err != nil {
+		log.Printf("Can't delete document: %v\n", err)
+	}
+}
+
 // Start ...
 func (d *DataTrack) Start(db DB, events chan entities.Event) {
 	d.collection = db.Session.DB(db.DBName).C("track")
