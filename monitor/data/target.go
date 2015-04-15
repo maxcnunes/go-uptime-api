@@ -126,8 +126,13 @@ func (d *DataTarget) Update(id string, data entities.Target) {
 		return
 	}
 
+	attrs := bson.M{"url": data.URL, "emails": data.Emails}
+	if data.Status != 0 {
+		attrs["status"] = data.Status
+	}
+
 	log.Printf("Updating url %s to status %d", target.URL, target.Status)
-	err := d.collection.UpdateId(target.ID, bson.M{"$set": bson.M{"url": data.URL, "status": data.Status}})
+	err := d.collection.UpdateId(target.ID, bson.M{"$set": attrs})
 	if err != nil {
 		log.Printf("Can't update document: %v\n", err)
 	}
