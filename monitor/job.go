@@ -31,9 +31,6 @@ func (j Job) checkTargetsStatus() {
 }
 
 func (j Job) checkTargetsPeriodically() {
-	// temp examples
-	j.data.Target.Create("https://google.com/", nil)
-	j.data.Target.Create("http://twitter.com/", nil)
 
 	StartEventListener(j.data)
 
