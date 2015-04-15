@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/gorilla/websocket"
-	"github.com/maxcnunes/monitor-api/monitor/data"
-	"github.com/maxcnunes/monitor-api/monitor/entities"
+	"github.com/maxcnunes/go-uptime-api/monitor/data"
+	"github.com/maxcnunes/go-uptime-api/monitor/entities"
 )
 
 // Websocket ...
@@ -34,8 +34,10 @@ func (ws wsConnection) SendText(msg string) {
 
 // SendJSON ...
 func (ws wsConnection) SendJSON(json interface{}) {
-	log.Printf("Sends ws object [%s]", json)
-	ws.conn.WriteJSON(json)
+	log.Printf("Sends ws object [%v]", json)
+	if err := ws.conn.WriteJSON(json); err != nil {
+		log.Printf(" Error sending ws object [%v]: %v", json, err)
+	}
 }
 
 // Start ...

@@ -7,12 +7,12 @@ local: &LOCAL
   ports:
     - 3000
   volumes:
-    - .:/go/src/github.com/maxcnunes/monitor-api
+    - .:/go/src/github.com/maxcnunes/go-uptime-api
     - /var/run/docker.sock:/tmp/docker.sock
   environment: &LOCAL-ENVIRONMENT
-    MONGODB_DATABASE: monitor-api
+    MONGODB_DATABASE: go-uptime-api
     VIRTUAL_PORT: 3000
-    VIRTUAL_HOST: monitor-service.local.dockito.org
+    VIRTUAL_HOST: go-uptime-api.local.dockito.org
     PORT_BEHIND_PROXY: 3001
     CHECK_TARGETS_AT_EVERY: 1m # 1 minute
     EMAIL_FROM: # gets environment variable from machine
@@ -27,4 +27,4 @@ test:
   command: ginkgo watch -v -p -r -race -failOnPending -randomizeAllSpecs
   environment:
     <<: *LOCAL-ENVIRONMENT
-    MONGODB_DATABASE: monitor-api-test
+    MONGODB_DATABASE: go-uptime-api-test

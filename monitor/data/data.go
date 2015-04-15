@@ -1,6 +1,6 @@
 package data
 
-import "github.com/maxcnunes/monitor-api/monitor/entities"
+import "github.com/maxcnunes/go-uptime-api/monitor/entities"
 
 // DataMonitor ...
 type DataMonitor struct {

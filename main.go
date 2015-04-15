@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/maxcnunes/monitor-api/monitor"
-	dm "github.com/maxcnunes/monitor-api/monitor/data"
-	"github.com/maxcnunes/monitor-api/server"
+	"github.com/maxcnunes/go-uptime-api/monitor"
+	dm "github.com/maxcnunes/go-uptime-api/monitor/data"
+	"github.com/maxcnunes/go-uptime-api/server"
 )
 
 var (

@@ -1,8 +1,8 @@
 FROM golang:1.4
 
-WORKDIR /go/src/github.com/maxcnunes/monitor-api
+WORKDIR /go/src/github.com/maxcnunes/go-uptime-api
 
-ADD . /go/src/github.com/maxcnunes/monitor-api
+ADD . /go/src/github.com/maxcnunes/go-uptime-api
 
 RUN go get -d -v ./...
 

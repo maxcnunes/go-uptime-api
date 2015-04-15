@@ -1,6 +1,6 @@
-# Monitor
+# go-uptime
 
-[![Build Status](https://travis-ci.org/maxcnunes/monitor-api.svg?branch=master)](https://travis-ci.org/maxcnunes/monitor-api)
+[![Build Status](https://travis-ci.org/maxcnunes/go-uptime-api.svg?branch=master)](https://travis-ci.org/maxcnunes/go-uptime-api)
 
 Simple monitor server to check uptime services (or any other http target).
 

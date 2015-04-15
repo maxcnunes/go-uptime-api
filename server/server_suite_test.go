@@ -14,7 +14,7 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	"github.com/maxcnunes/monitor-api/monitor/data"
+	"github.com/maxcnunes/go-uptime-api/monitor/data"
 )
 
 var (

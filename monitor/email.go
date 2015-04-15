@@ -5,7 +5,7 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/maxcnunes/monitor-api/monitor/entities"
+	"github.com/maxcnunes/go-uptime-api/monitor/entities"
 	"gopkg.in/gomail.v1"
 )
 

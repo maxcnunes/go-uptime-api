@@ -6,8 +6,8 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/maxcnunes/monitor-api/monitor/data"
-	"github.com/maxcnunes/monitor-api/monitor/entities"
+	"github.com/maxcnunes/go-uptime-api/monitor/data"
+	"github.com/maxcnunes/go-uptime-api/monitor/entities"
 )
 
 // TargetAPI ...

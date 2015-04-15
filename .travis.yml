@@ -4,7 +4,7 @@ go:
 env:
   global:
     - MONGO_PORT=tcp://127.0.0.1:27017
-    - MONGODB_DATABASE=monitor-api
+    - MONGODB_DATABASE=go-uptime-api
     - VIRTUAL_PORT=3000
     - VIRTUAL_HOST=fake-domain.com
     - CHECK_TARGETS_AT_EVERY=1d

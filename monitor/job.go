@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/maxcnunes/monitor-api/monitor/data"
+	"github.com/maxcnunes/go-uptime-api/monitor/data"
 )
 
 // Job ...

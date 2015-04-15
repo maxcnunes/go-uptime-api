@@ -6,8 +6,8 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	"github.com/maxcnunes/monitor-api/monitor/entities"
-	. "github.com/maxcnunes/monitor-api/server"
+	"github.com/maxcnunes/go-uptime-api/monitor/entities"
+	. "github.com/maxcnunes/go-uptime-api/server"
 )
 
 var (

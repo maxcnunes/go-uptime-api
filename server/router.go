@@ -4,10 +4,10 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/maxcnunes/monitor-api/server/api"
+	"github.com/maxcnunes/go-uptime-api/server/api"
 
 	"github.com/gorilla/mux"
-	"github.com/maxcnunes/monitor-api/monitor/data"
+	"github.com/maxcnunes/go-uptime-api/monitor/data"
 )
 
 // Router ...
