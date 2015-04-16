@@ -9,7 +9,7 @@ import (
 	"gopkg.in/mgo.v2"
 )
 
-// DB ...
+// DB has the database configuration
 type DB struct {
 	connectionURI string
 	DBName        string
@@ -37,7 +37,7 @@ func (db *DB) setConnectionURIFromEnvConfig() {
 	db.connectionURI = "mongodb://" + dbHost + ":" + dbPort + "/" + db.DBName
 }
 
-// Start ...
+// Start a new instance of database
 func (db *DB) Start() {
 	var err error
 	db.setConnectionURIFromEnvConfig()
@@ -51,7 +51,7 @@ func (db *DB) Start() {
 	db.Session.SetMode(mgo.Monotonic, true)
 }
 
-// Close ...
+// Close the current database session
 func (db *DB) Close() {
 	db.Session.Close()
 }

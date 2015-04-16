@@ -7,17 +7,17 @@ import (
 	"github.com/maxcnunes/go-uptime-api/monitor/data"
 )
 
-// TrackAPI ...
+// TrackAPI has all routes related to track data manipulation
 type TrackAPI struct {
 	data *data.DataMonitor
 }
 
-// Start ...
+// Start a new instance of track api
 func (api *TrackAPI) Start(data *data.DataMonitor) {
 	api.data = data
 }
 
-// ListHandler ...
+// ListHandler handles GET request returning all tracks
 func (api *TrackAPI) ListHandler(rw http.ResponseWriter, req *http.Request) {
 	query := req.URL.Query()
 	targetID := ""

@@ -8,7 +8,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-// DataTarget ...
+// DataTarget is the data configuration related to Target collection
 type DataTarget struct {
 	collection *mgo.Collection
 	events     chan entities.Event
@@ -29,7 +29,7 @@ func (d *DataTarget) FindOneByURL(url string) *entities.Target {
 	return &target
 }
 
-// FindOneByID ...
+// FindOneByID finds a single target by the id field
 func (d *DataTarget) FindOneByID(id string) *entities.Target {
 	_id := bson.ObjectIdHex(id)
 	var target entities.Target
@@ -46,7 +46,7 @@ func (d *DataTarget) FindOneByID(id string) *entities.Target {
 	return &target
 }
 
-// Create ...
+// Create a new target in the database
 func (d *DataTarget) Create(url string, emails []string) *entities.Target {
 	target := d.FindOneByURL(url)
 	if target != nil {
@@ -65,7 +65,7 @@ func (d *DataTarget) Create(url string, emails []string) *entities.Target {
 	return &doc
 }
 
-// Remove ...
+// Remove an existing target by the URL field
 func (d *DataTarget) Remove(url string) {
 	target := d.FindOneByURL(url)
 	if target == nil {
@@ -83,7 +83,7 @@ func (d *DataTarget) Remove(url string) {
 	go func() { d.events <- entities.Event{Event: entities.Removed, Target: target} }()
 }
 
-// RemoveByID ...
+// RemoveByID removes an existing target by the ID field
 func (d *DataTarget) RemoveByID(id string) {
 	target := d.FindOneByID(id)
 	if target == nil {
@@ -101,7 +101,7 @@ func (d *DataTarget) RemoveByID(id string) {
 	go func() { d.events <- entities.Event{Event: entities.Removed, Target: target} }()
 }
 
-// UpdateStatusByURL ...
+// UpdateStatusByURL updates a existing target by the URL field
 func (d *DataTarget) UpdateStatusByURL(url string, status string) {
 	target := d.FindOneByURL(url)
 	if target != nil {
@@ -118,7 +118,7 @@ func (d *DataTarget) UpdateStatusByURL(url string, status string) {
 	go func() { d.events <- entities.Event{Event: entities.Updated, Target: target} }()
 }
 
-// Update ...
+// Update an existing target
 func (d *DataTarget) Update(id string, data entities.Target) {
 	target := d.FindOneByID(id)
 	if target == nil {
@@ -140,7 +140,7 @@ func (d *DataTarget) Update(id string, data entities.Target) {
 	go func() { d.events <- entities.Event{Event: entities.Updated, Target: target} }()
 }
 
-// GetAllURLS ...
+// GetAllURLS returns all existing target's URLs in the databse
 func (d *DataTarget) GetAllURLS() []string {
 	urls := []string{}
 
@@ -153,7 +153,7 @@ func (d *DataTarget) GetAllURLS() []string {
 	return urls
 }
 
-// GetAll ...
+// GetAll returns all targets
 func (d *DataTarget) GetAll() []entities.Target {
 	targets := []entities.Target{}
 
@@ -165,7 +165,7 @@ func (d *DataTarget) GetAll() []entities.Target {
 	return targets
 }
 
-// Start ...
+// Start a new instance of data target
 func (d *DataTarget) Start(db DB, events chan entities.Event) {
 	d.collection = db.Session.DB(db.DBName).C("target")
 	d.events = events

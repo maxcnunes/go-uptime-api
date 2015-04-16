@@ -17,13 +17,14 @@ const (
 	endpoint     = "unix:///tmp/docker.sock"
 )
 
-// Container ...
+// Container has informations about a Docker container that will be used as a target
 type Container struct {
 	URL  string
 	Name string
 }
 
-// StartEventListener ...
+// StartEventListener starts to listen for all events from Docker.
+// But only cares to created containers.
 func StartEventListener(data *data.DataMonitor) {
 	client, _ = docker.NewClient(endpoint)
 
@@ -55,7 +56,7 @@ func StartEventListener(data *data.DataMonitor) {
 	}()
 }
 
-// LoadAllVirtualHosts ...
+// LoadAllVirtualHosts gets all VIRTUAL_HOST environment variables from all Docker containers
 func LoadAllVirtualHosts(data *data.DataMonitor) {
 	filters := make(map[string][]string)
 	filters["status"] = []string{"running"}
@@ -80,14 +81,8 @@ func getVirtualHost(containerID string) string {
 		log.Fatalf("Unable to inspect container %s, error: %s", containerID, err)
 	}
 
-	// log.Print(">>> Container Info <<<")
-	// log.Printf("Args %s", info.Args)
-	// log.Printf("Name %s", info.Name)
-	// log.Printf("Env", info.Config.Env)
 	var virtualHost string
 	for _, env := range info.Config.Env {
-		// log.Printf(">>> env %s", env)
-
 		if strings.Contains(env, "VIRTUAL_HOST=") {
 			virtualHost = strings.Replace(env, "VIRTUAL_HOST=", "", -1)
 			break

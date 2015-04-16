@@ -9,13 +9,13 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-// DataTrack ...
+// DataTrack is the data configuration related to Track collection
 type DataTrack struct {
 	collection *mgo.Collection
 	events     chan entities.Event
 }
 
-// Find ...
+// Find all tracks
 func (d *DataTrack) Find(targetID string) []entities.Track {
 	tracks := []entities.Track{}
 
@@ -32,7 +32,7 @@ func (d *DataTrack) Find(targetID string) []entities.Track {
 	return tracks
 }
 
-// Create ...
+// Create a new track
 func (d *DataTrack) Create(target entities.Target, status int) *entities.Track {
 	doc := entities.Track{
 		ID:        bson.NewObjectId(),
@@ -47,7 +47,7 @@ func (d *DataTrack) Create(target entities.Target, status int) *entities.Track {
 	return &doc
 }
 
-// RemoveByTargetID ...
+// RemoveByTargetID removes a track by the targetId field
 func (d *DataTrack) RemoveByTargetID(id string) {
 	err := d.collection.Remove(bson.M{"targetId": bson.ObjectIdHex(id)})
 	if err != nil {
@@ -55,7 +55,7 @@ func (d *DataTrack) RemoveByTargetID(id string) {
 	}
 }
 
-// Start ...
+// Start a new instance of data track
 func (d *DataTrack) Start(db DB, events chan entities.Event) {
 	d.collection = db.Session.DB(db.DBName).C("track")
 	d.events = events

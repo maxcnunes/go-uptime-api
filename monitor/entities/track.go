@@ -6,7 +6,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-// Track ...
+// Track data structure
 type Track struct {
 	ID        bson.ObjectId `bson:"_id" json:"id"`
 	TargetID  bson.ObjectId `bson:"targetId" json:"targetId"`

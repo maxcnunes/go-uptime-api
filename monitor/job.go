@@ -8,7 +8,7 @@ import (
 	"github.com/maxcnunes/go-uptime-api/monitor/data"
 )
 
-// Job ...
+// Job is responsible for running the polling request for all targets
 type Job struct {
 	data         *data.DataMonitor
 	checkAtEvery time.Duration
@@ -55,7 +55,7 @@ func (j Job) checkTargetsPeriodically() {
 	}()
 }
 
-// Start ...
+// Start a new instance of Job
 func (j Job) Start(data *data.DataMonitor, checkAtEvery string) {
 	j.data = data
 

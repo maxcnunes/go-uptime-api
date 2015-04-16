@@ -2,7 +2,8 @@ package data
 
 import "github.com/maxcnunes/go-uptime-api/monitor/entities"
 
-// DataMonitor ...
+// DataMonitor aggregates the data configuration
+// like the database configuration and connections to MongoDB collections
 type DataMonitor struct {
 	DB     DB
 	Events chan entities.Event

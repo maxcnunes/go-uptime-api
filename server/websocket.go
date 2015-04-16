@@ -9,7 +9,7 @@ import (
 	"github.com/maxcnunes/go-uptime-api/monitor/entities"
 )
 
-// Websocket ...
+// Websocket aggregates all the web socket configuration and actions
 type Websocket struct {
 	data *data.DataMonitor
 }

@@ -42,7 +42,8 @@ func getEmailConfig() emailConfig {
 	return conf
 }
 
-// SendNotificaton ...
+// SendNotificaton sends notifications to all emails related to a target
+// The notification can be about a uptime or downtime depending in the current target's status
 func SendNotificaton(target entities.Target) {
 	if len(target.Emails) == 0 {
 		return

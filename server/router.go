@@ -10,7 +10,7 @@ import (
 	"github.com/maxcnunes/go-uptime-api/monitor/data"
 )
 
-// Router ...
+// Router aggregates all API routes
 type Router struct{}
 
 var (
@@ -18,7 +18,7 @@ var (
 	trackAPI  = api.TrackAPI{}
 )
 
-// Start ...
+// Start the API router
 func (r *Router) Start(data *data.DataMonitor) *mux.Router {
 	log.Print("Starting API server")
 	router := mux.NewRouter()
